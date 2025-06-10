@@ -225,12 +225,6 @@ function App() {
   const musicProgress = musicSection ? 
     Math.max(0, Math.min((scrollY - musicSectionStart) / musicSectionHeight, 1)) : 0;
 
-  // Calcular progresso da seção da carta
-  const letterSectionStart = window.innerHeight * 4 + window.innerHeight * 10; // Após primeira e música
-  const letterSectionHeight = window.innerHeight * 6;
-  const letterProgress = letterSection && scrollY >= letterSectionStart ? 
-    Math.max(0, Math.min((scrollY - letterSectionStart) / letterSectionHeight, 1)) : 0;
-
   // Posições dos discos da seção de música - movimento muito mais lento
   let disk1X = -120; // Começar ainda mais fora da tela à esquerda
   let disk2X = -120;
@@ -600,8 +594,8 @@ function App() {
                 className="floating-heart"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ 
-                  opacity: letterProgress > 0.1 ? 1 : 0,
-                  y: letterProgress > 0.1 ? -20 : 100,
+                  opacity: letterSection ? 1 : 0,
+                  y: letterSection ? -20 : 100,
                   x: Math.sin(Date.now() * 0.001 + i) * 50
                 }}
                 transition={{ 

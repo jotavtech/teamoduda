@@ -1,0 +1,1359 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  overflow-x: hidden;
+  height: auto;
+  min-height: 100vh;
+  /* Filtro granulado vintage para todo o site */
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.1) 0.5px, transparent 0.5px);
+  background-size: 4px 4px, 6px 6px;
+  opacity: 0.4;
+  z-index: 9999;
+  pointer-events: none;
+  animation: grainMove 8s ease-in-out infinite;
+  mix-blend-mode: overlay;
+}
+
+@keyframes grainMove {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(-2px, -1px) rotate(0.5deg); }
+  50% { transform: translate(1px, -2px) rotate(-0.5deg); }
+  75% { transform: translate(-1px, 1px) rotate(0.3deg); }
+}
+
+.App {
+  position: relative;
+  height: auto;
+  min-height: calc(400vh + 1000vh + 600vh); /* Primeira + Music + Letter */
+  /* Efeito de profundidade */
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+}
+
+/* Partículas flutuantes para todo o site */
+.App::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255, 182, 193, 0.4), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255, 105, 180, 0.3), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255, 20, 147, 0.5), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255, 69, 0, 0.3), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(138, 43, 226, 0.4), transparent);
+  background-repeat: repeat;
+  background-size: 200px 150px;
+  z-index: 5;
+  pointer-events: none;
+  animation: particleFloat 20s linear infinite;
+  opacity: 0.6;
+}
+
+@keyframes particleFloat {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); }
+  33% { transform: translateY(-100px) translateX(50px) rotate(120deg); }
+  66% { transform: translateY(-50px) translateX(-30px) rotate(240deg); }
+  100% { transform: translateY(-150px) translateX(100px) rotate(360deg); }
+}
+
+/* Fundo fixo com a imagem do casal */
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-image: url('./couple-beach.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  z-index: -2;
+}
+
+/* Overlay escuro para melhor contraste */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    135deg, 
+    rgba(0, 0, 0, 0.4) 0%, 
+    rgba(255, 105, 180, 0.3) 30%,
+    rgba(138, 43, 226, 0.2) 50%, 
+    rgba(255, 105, 180, 0.3) 70%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  z-index: -1;
+  animation: overlayShift 15s ease-in-out infinite;
+}
+
+@keyframes overlayShift {
+  0%, 100% { 
+    background: linear-gradient(
+      135deg, 
+      rgba(0, 0, 0, 0.4) 0%, 
+      rgba(255, 105, 180, 0.3) 30%,
+      rgba(138, 43, 226, 0.2) 50%, 
+      rgba(255, 105, 180, 0.3) 70%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+  25% { 
+    background: linear-gradient(
+      45deg, 
+      rgba(0, 0, 0, 0.3) 0%, 
+      rgba(255, 182, 193, 0.4) 25%,
+      rgba(221, 160, 221, 0.3) 50%, 
+      rgba(255, 182, 193, 0.4) 75%,
+      rgba(0, 0, 0, 0.3) 100%
+    );
+  }
+  50% { 
+    background: linear-gradient(
+      225deg, 
+      rgba(0, 0, 0, 0.5) 0%, 
+      rgba(255, 20, 147, 0.2) 30%,
+      rgba(75, 0, 130, 0.3) 50%, 
+      rgba(255, 20, 147, 0.2) 70%,
+      rgba(0, 0, 0, 0.5) 100%
+    );
+  }
+  75% { 
+    background: linear-gradient(
+      315deg, 
+      rgba(0, 0, 0, 0.4) 0%, 
+      rgba(255, 69, 0, 0.3) 25%,
+      rgba(255, 105, 180, 0.4) 50%, 
+      rgba(255, 69, 0, 0.3) 75%,
+      rgba(0, 0, 0, 0.4) 100%
+    );
+  }
+}
+
+/* Seção principal */
+.main-section {
+  height: 400vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* Container da escrita */
+.writing-container {
+  position: fixed;
+  top: 50vh; /* Usar vh para consistência */
+  left: 50vw; /* Usar vw para consistência */
+  transform: translate(-50%, -50%);
+  z-index: 10; /* Aumentado para ficar acima dos discos */
+  width: 80vw;
+  max-width: 800px;
+  /* Garantir centralização perfeita */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* Efeitos de luz pulsante */
+  animation: containerGlow 4s ease-in-out infinite;
+}
+
+@keyframes containerGlow {
+  0%, 100% { 
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3)); 
+  }
+  50% { 
+    filter: drop-shadow(0 0 40px rgba(255, 182, 193, 0.6)); 
+  }
+}
+
+/* SVG da palavra lovers */
+.lovers-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+  animation: svgFloat 6s ease-in-out infinite;
+}
+
+@keyframes svgFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  25% { transform: translateY(-5px) scale(1.02); }
+  50% { transform: translateY(-2px) scale(1.01); }
+  75% { transform: translateY(-8px) scale(1.03); }
+}
+
+/* Estilos para as letras */
+.letter-path {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  animation: letterGlow 3s ease-in-out infinite;
+}
+
+@keyframes letterGlow {
+  0%, 100% { 
+    stroke: #ffffff;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+  }
+  33% { 
+    stroke: #ffb6c1;
+    filter: drop-shadow(0 0 15px rgba(255, 182, 193, 1));
+  }
+  66% { 
+    stroke: #ff69b4;
+    filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1));
+  }
+}
+
+/* Estilo para o coração */
+.heart-path {
+  stroke: #ff6b6b;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.8));
+  transition: fill 0.5s ease;
+  animation: heartBeat 2s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+  0%, 100% { 
+    stroke: #ff6b6b;
+    stroke-width: 3;
+    filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.8));
+    transform: scale(1);
+  }
+  25% { 
+    stroke: #ff1493;
+    stroke-width: 4;
+    filter: drop-shadow(0 0 25px rgba(255, 20, 147, 1));
+    transform: scale(1.1);
+  }
+  50% { 
+    stroke: #dc143c;
+    stroke-width: 5;
+    filter: drop-shadow(0 0 30px rgba(220, 20, 60, 1));
+    transform: scale(1.15);
+  }
+  75% { 
+    stroke: #ff69b4;
+    stroke-width: 4;
+    filter: drop-shadow(0 0 20px rgba(255, 105, 180, 1));
+    transform: scale(1.05);
+  }
+}
+
+/* Indicador de scroll */
+.scroll-indicator {
+  position: fixed;
+  bottom: 80px;
+  left: 50vw; /* Usar vw para consistência */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  animation: bounce 2s infinite;
+}
+
+.scroll-indicator p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+}
+
+.arrow-down {
+  font-size: 24px;
+  animation: bounce 1.5s infinite;
+}
+
+/* Indicador de progresso */
+.progress-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50vw; /* Usar vw para consistência */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  width: 300px;
+  animation: progressFloat 4s ease-in-out infinite;
+}
+
+@keyframes progressFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-5px); }
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px; /* Aumentado de 8px para 12px */
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 6px; /* Ajustado proporcionalmente */
+  overflow: hidden;
+  margin-bottom: 10px;
+  backdrop-filter: blur(15px); /* Aumentado de 10px para 15px */
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 5px rgba(255, 255, 255, 0.2);
+  animation: progressBarGlow 3s ease-in-out infinite;
+}
+
+@keyframes progressBarGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.3),
+      inset 0 2px 5px rgba(255, 255, 255, 0.2),
+      0 0 20px rgba(255, 182, 193, 0.3);
+  }
+  50% { 
+    box-shadow: 
+      0 6px 20px rgba(0, 0, 0, 0.4),
+      inset 0 3px 8px rgba(255, 255, 255, 0.3),
+      0 0 30px rgba(255, 105, 180, 0.5);
+  }
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff6b6b, #ff9ff3, #fecfef, #ff6b6b);
+  background-size: 200% 100%;
+  border-radius: 6px; /* Ajustado proporcionalmente */
+  transition: width 0.1s ease;
+  box-shadow: 
+    0 0 15px rgba(255, 107, 107, 0.8),
+    inset 0 2px 5px rgba(255, 255, 255, 0.4);
+  animation: progressFillShine 2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes progressFillShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: progressFillGlitter 1.5s ease-in-out infinite;
+}
+
+@keyframes progressFillGlitter {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.progress-indicator p {
+  font-size: 16px; /* Aumentado de 14px para 16px */
+  text-shadow: 
+    2px 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 10px rgba(255, 182, 193, 0.5);
+  font-weight: bold;
+  animation: textGlow 2.5s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% { 
+    text-shadow: 
+      2px 2px 4px rgba(0, 0, 0, 0.8),
+      0 0 10px rgba(255, 182, 193, 0.5);
+  }
+  50% { 
+    text-shadow: 
+      2px 2px 6px rgba(0, 0, 0, 0.9),
+      0 0 20px rgba(255, 105, 180, 0.8);
+  }
+}
+
+/* Seção de Música */
+.music-section {
+  height: 1000vh; /* Aumentado de 400vh para 1000vh - muito mais scroll necessário */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.music-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  z-index: 1;
+}
+
+/* Container dos discos de vinil */
+.vinyl-container {
+  position: fixed;
+  top: 15vh; /* Usar vh para garantir centralização vertical na viewport */
+  left: 50vw; /* Usar vw para garantir centralização horizontal na viewport */
+  transform: translate(-50%, -50%); /* Centralização perfeita */
+  z-index: 1; /* Menor que o writing-container para ficar atrás */
+  will-change: transform;
+  /* Garantir que não seja afetado por outros elementos */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Disco de vinil - GIGANTE */
+.vinyl-disk {
+  width: 800px; /* Aumentado de 600px para 800px - ainda mais gigante */
+  height: 800px; /* Aumentado de 600px para 800px - ainda mais gigante */
+  border-radius: 50%;
+  background: linear-gradient(45deg, #2c2c2c, #1a1a1a);
+  position: relative;
+  box-shadow: 
+    0 40px 120px rgba(0, 0, 0, 0.9),
+    inset 0 0 100px rgba(255, 255, 255, 0.1),
+    0 0 200px rgba(255, 105, 180, 0.3); /* Sombra ainda maior */
+  animation: vinylSpin 8s linear infinite, vinylGlow 4s ease-in-out infinite; /* Rotação mais lenta - de 3s para 8s */
+  filter: brightness(1.1);
+  transition: all 0.5s ease;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes vinylGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 40px 120px rgba(0, 0, 0, 0.9),
+      inset 0 0 100px rgba(255, 255, 255, 0.1),
+      0 0 200px rgba(255, 105, 180, 0.3);
+    filter: brightness(1.1);
+  }
+  25% { 
+    box-shadow: 
+      0 50px 140px rgba(0, 0, 0, 0.9),
+      inset 0 0 120px rgba(255, 182, 193, 0.2),
+      0 0 250px rgba(255, 20, 147, 0.4);
+    filter: brightness(1.2);
+  }
+  50% { 
+    box-shadow: 
+      0 60px 160px rgba(0, 0, 0, 0.9),
+      inset 0 0 140px rgba(138, 43, 226, 0.15),
+      0 0 300px rgba(75, 0, 130, 0.5);
+    filter: brightness(1.3);
+  }
+  75% { 
+    box-shadow: 
+      0 45px 130px rgba(0, 0, 0, 0.9),
+      inset 0 0 110px rgba(255, 69, 0, 0.18),
+      0 0 220px rgba(255, 140, 0, 0.35);
+    filter: brightness(1.15);
+  }
+}
+
+.vinyl-disk:hover {
+  transform: scale(1.05);
+  filter: brightness(1.4) saturate(1.3);
+  box-shadow: 
+    0 60px 180px rgba(0, 0, 0, 0.9),
+    inset 0 0 160px rgba(255, 255, 255, 0.2),
+    0 0 400px rgba(255, 105, 180, 0.6);
+}
+
+/* Grooves do vinil */
+.vinyl-grooves {
+  position: absolute;
+  top: 40px; /* Ajustado proporcionalmente */
+  left: 40px;
+  right: 40px;
+  bottom: 40px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(255, 255, 255, 0.1) 1deg,
+    transparent 2deg
+  );
+  animation: groovesShine 6s ease-in-out infinite;
+}
+
+@keyframes groovesShine {
+  0%, 100% { 
+    background: repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.1) 1deg,
+      transparent 2deg
+    );
+  }
+  33% { 
+    background: repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 182, 193, 0.15) 1deg,
+      transparent 2deg
+    );
+  }
+  66% { 
+    background: repeating-conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 105, 180, 0.2) 1deg,
+      transparent 2deg
+    );
+  }
+}
+
+/* Label central do disco */
+.vinyl-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 260px; /* Aumentado de 200px para 260px */
+  height: 260px; /* Aumentado de 200px para 260px */
+  border-radius: 50%;
+  background: linear-gradient(45deg, #ff6b6b, #ff9ff3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  z-index: 3;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.vinyl-label::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.vinyl-label h3,
+.vinyl-label p {
+  position: relative;
+  z-index: 2;
+}
+
+.vinyl-label h3 {
+  font-size: 28px; /* Aumentado de 24px para 28px */
+  margin-bottom: 12px; /* Aumentado de 10px para 12px */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.vinyl-label p {
+  font-size: 22px; /* Aumentado de 18px para 22px */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Cores e imagens específicas para cada disco */
+.vinyl-disk:first-child .vinyl-label {
+  background-image: url('https://res.cloudinary.com/dzwfuzxxw/image/upload/v1749507392/LOVES_-_winged_figures_embrace_mzjxm9.png');
+}
+
+.vinyl-disk.tribalistas .vinyl-label {
+  background-image: url('https://res.cloudinary.com/dzwfuzxxw/image/upload/v1749507392/902dc56b-e68f-43ce-bcac-ca4dfef2d783_vjqhif.jpg');
+}
+
+.vinyl-disk.mac-demarco .vinyl-label {
+  background-image: url('https://res.cloudinary.com/dzwfuzxxw/image/upload/v1749507392/c7fc7c44-4410-4693-b72b-0bc1ed864152_iedefp.jpg');
+}
+
+/* Indicador de música */
+.music-indicator {
+  position: fixed;
+  top: 100px;
+  left: 50vw; /* Usar vw para consistência */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px 30px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.music-indicator p {
+  font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Indicador de scroll da seção de música */
+.music-scroll-indicator {
+  position: fixed;
+  bottom: 50px;
+  left: 50vw; /* Usar vw para consistência */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  animation: bounce 2s infinite;
+}
+
+.music-scroll-indicator p {
+  font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Animações */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+  40% { transform: translateY(-10px) translateX(-50%); }
+  60% { transform: translateY(-5px) translateX(-50%); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); } /* Pulse mais sutil */
+  100% { transform: scale(1); }
+}
+
+/* Prompt de áudio */
+.audio-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.audio-prompt-content {
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8);
+  padding: 40px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(255, 107, 107, 0.3);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  max-width: 450px;
+  width: 90%;
+  animation: audioPromptIn 0.5s ease-out;
+}
+
+.audio-prompt-content h2 {
+  color: white;
+  font-size: 2rem;
+  margin: 0 0 15px 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: bold;
+}
+
+.audio-prompt-content p {
+  color: white;
+  font-size: 1.1rem;
+  margin: 0 0 25px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  line-height: 1.4;
+}
+
+.enable-audio-btn {
+  background: linear-gradient(135deg, #fff, #f0f0f0);
+  color: #ff6b6b;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: 0 10px 15px 10px;
+  min-width: 200px;
+}
+
+.enable-audio-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #ffffff, #e8e8e8);
+}
+
+.skip-audio-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0 10px;
+}
+
+.skip-audio-btn:hover {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes audioPromptIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Carta responsiva */
+.envelope-back { width: 450px; height: 300px; } /* Proporcionalmente menor */
+.envelope-back::before { 
+  border-left: 225px solid transparent;
+  border-right: 225px solid transparent;
+  border-bottom: 150px solid #d63031;
+}
+.envelope-flap {
+  border-left: 225px solid transparent;
+  border-right: 225px solid transparent;
+  border-top: 150px solid #e17055;
+}
+.letter-paper { width: 400px; height: 550px; padding: 30px; top: 20px; left: 25px; }
+.letter-header h2 { font-size: 1.6rem; }
+.letter-paragraph { font-size: 1rem; }
+.first-letter { font-size: 3rem; }
+.floating-heart { font-size: 1.5rem; }
+
+/* Seção da Carta de Amor */
+.letter-section {
+  height: 200vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffeaa7, #fab1a0, #fd79a8);
+  /* Garantir que ocupe toda a viewport */
+  width: 100vw;
+  min-height: 100vh;
+  animation: letterSectionShift 25s ease-in-out infinite;
+}
+
+@keyframes letterSectionShift {
+  0%, 100% { 
+    background: linear-gradient(135deg, #ffeaa7, #fab1a0, #fd79a8);
+  }
+  25% { 
+    background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
+  }
+  50% { 
+    background: linear-gradient(225deg, #ffecd2, #fcb69f, #ff9a9e);
+  }
+  75% { 
+    background: linear-gradient(315deg, #fbc2eb, #a6c1ee, #fbc2eb);
+  }
+}
+
+.letter-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  z-index: 1;
+  animation: letterBackgroundPulse 8s ease-in-out infinite;
+}
+
+@keyframes letterBackgroundPulse {
+  0%, 100% { 
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    transform: scale(1);
+  }
+  50% { 
+    background: radial-gradient(circle at center, rgba(255, 182, 193, 0.3) 0%, transparent 80%);
+    transform: scale(1.1);
+  }
+}
+
+/* Corações flutuantes */
+.floating-hearts {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.floating-heart {
+  position: absolute;
+  font-size: 2rem;
+  opacity: 0.8;
+  animation: float 4s ease-in-out infinite, heartGlow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  25% { transform: translateY(-20px) rotate(5deg) scale(1.1); }
+  50% { transform: translateY(-15px) rotate(-3deg) scale(1.05); }
+  75% { transform: translateY(-25px) rotate(8deg) scale(1.15); }
+}
+
+@keyframes heartGlow {
+  0%, 100% { 
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+    filter: hue-rotate(0deg);
+  }
+  33% { 
+    text-shadow: 0 0 20px rgba(255, 20, 147, 1);
+    filter: hue-rotate(30deg);
+  }
+  66% { 
+    text-shadow: 0 0 25px rgba(220, 20, 60, 1);
+    filter: hue-rotate(-30deg);
+  }
+}
+
+/* Container do envelope */
+.envelope-container {
+  position: fixed;
+  top: 20vh;
+  left: 35vw;
+  transform: translate(-50%, -50%);
+  z-index: 15;
+  perspective: 1000px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  pointer-events: auto;
+  /* Estabilizar posição durante cliques */
+  will-change: auto;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  /* Fixar posição absolutamente */
+  transform-origin: center center;
+  /* Evitar mudanças de posição */
+  contain: layout style paint;
+}
+
+/* Envelope de fundo - MAIOR */
+.envelope-back {
+  width: 600px;
+  height: 400px;
+  background: linear-gradient(135deg, #e17055, #d63031);
+  border-radius: 15px;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  animation: envelopeGlow 5s ease-in-out infinite;
+  transition: none; /* Remover transições que podem causar movimento */
+  /* Estabilizar envelope */
+  transform-origin: center center;
+  will-change: auto;
+}
+
+@keyframes envelopeGlow {
+  0%, 100% { 
+    background: linear-gradient(135deg, #e17055, #d63031);
+    box-shadow: 
+      0 30px 60px rgba(0, 0, 0, 0.4),
+      0 0 40px rgba(225, 112, 85, 0.3);
+  }
+  25% { 
+    background: linear-gradient(135deg, #ff7675, #e84393);
+    box-shadow: 
+      0 35px 70px rgba(0, 0, 0, 0.4),
+      0 0 60px rgba(255, 118, 117, 0.4);
+  }
+  50% { 
+    background: linear-gradient(135deg, #fd79a8, #fdcb6e);
+    box-shadow: 
+      0 40px 80px rgba(0, 0, 0, 0.4),
+      0 0 80px rgba(253, 121, 168, 0.5);
+  }
+  75% { 
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    box-shadow: 
+      0 32px 65px rgba(0, 0, 0, 0.4),
+      0 0 50px rgba(243, 156, 18, 0.35);
+  }
+}
+
+.envelope-back:hover {
+  transform: scale(1.02);
+  box-shadow: 
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(225, 112, 85, 0.6);
+}
+
+.envelope-back::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 300px solid transparent; /* Restaurado para o tamanho correto */
+  border-right: 300px solid transparent;
+  border-bottom: 200px solid #d63031; /* Restaurado para o tamanho correto */
+  border-radius: 15px 15px 0 0;
+}
+
+/* Tampa do envelope - com animação de abertura melhorada */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 300px solid transparent; /* Restaurado para o tamanho correto */
+  border-right: 300px solid transparent;
+  border-top: 200px solid #e17055; /* Restaurado para o tamanho correto */
+  transform-origin: bottom center;
+  border-radius: 15px 15px 0 0;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.8s ease-in-out; /* Animação suave */
+  animation: flapShimmer 6s ease-in-out infinite;
+}
+
+@keyframes flapShimmer {
+  0%, 100% { 
+    border-top-color: #e17055;
+    box-shadow: 
+      0 8px 25px rgba(0, 0, 0, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  33% { 
+    border-top-color: #ff7675;
+    box-shadow: 
+      0 10px 30px rgba(0, 0, 0, 0.3),
+      inset 0 0 30px rgba(255, 182, 193, 0.2);
+  }
+  66% { 
+    border-top-color: #fd79a8;
+    box-shadow: 
+      0 12px 35px rgba(0, 0, 0, 0.3),
+      inset 0 0 40px rgba(253, 121, 168, 0.15);
+  }
+}
+
+/* Papel da carta - MUITO MAIOR */
+.letter-paper {
+  position: absolute;
+  top: 30px; /* Ajustado para o envelope maior */
+  left: 30px; /* Ajustado para o envelope maior */
+  width: 540px; /* Restaurado para o tamanho maior */
+  height: 700px; /* Restaurado para o tamanho maior */
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 12px; /* Bordas mais arredondadas */
+  padding: 40px; /* Restaurado para padding maior */
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); /* Sombra maior */
+  border: 3px solid #ffeaa7; /* Borda mais grossa */
+  overflow-y: auto;
+  font-family: 'Georgia', serif;
+  transform-origin: bottom center;
+  transition: none; /* Remover transições que podem causar conflito */
+  animation: paperTexture 10s ease-in-out infinite;
+  /* Estabilizar animações */
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+@keyframes paperTexture {
+  0%, 100% { 
+    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    border-color: #ffeaa7;
+    box-shadow: 
+      0 15px 40px rgba(0, 0, 0, 0.3),
+      inset 0 0 50px rgba(255, 234, 167, 0.2);
+  }
+  25% { 
+    background: linear-gradient(145deg, #fff5f5, #fef5e7);
+    border-color: #ffcccc;
+    box-shadow: 
+      0 18px 45px rgba(0, 0, 0, 0.3),
+      inset 0 0 60px rgba(255, 204, 204, 0.25);
+  }
+  50% { 
+    background: linear-gradient(145deg, #fefefe, #f0f8ff);
+    border-color: #ffe4e1;
+    box-shadow: 
+      0 20px 50px rgba(0, 0, 0, 0.3),
+      inset 0 0 70px rgba(255, 228, 225, 0.3);
+  }
+  75% { 
+    background: linear-gradient(145deg, #fffafa, #f5f5f5);
+    border-color: #ffd1dc;
+    box-shadow: 
+      0 17px 42px rgba(0, 0, 0, 0.3),
+      inset 0 0 55px rgba(255, 209, 220, 0.22);
+  }
+}
+
+.letter-paper:hover {
+  transform: scale(1.01) rotate(0.5deg);
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.4),
+    inset 0 0 100px rgba(255, 234, 167, 0.4);
+}
+
+/* Cabeçalho da carta */
+.letter-header {
+  text-align: center;
+  margin-bottom: 40px; /* Maior espaçamento */
+  border-bottom: 3px solid #fd79a8; /* Linha mais grossa */
+  padding-bottom: 25px; /* Maior padding */
+}
+
+.letter-header h2 {
+  color: #d63031;
+  font-size: 2rem; /* Restaurado para o tamanho maior */
+  margin-bottom: 20px; /* Maior margem */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  font-family: 'Georgia', serif;
+}
+
+.letter-date {
+  color: #636e72;
+  font-style: italic;
+}
+
+.letter-date p {
+  margin: 8px 0; /* Maior margem */
+  font-size: 1.1rem; /* Fonte maior */
+}
+
+/* Conteúdo da carta */
+.letter-content {
+  line-height: 1.9; /* Maior espaçamento entre linhas */
+  color: #2d3436;
+}
+
+.letter-paragraph {
+  margin-bottom: 25px; /* Maior espaçamento entre parágrafos */
+  font-size: 1.2rem; /* Restaurado para o tamanho maior */
+  text-align: justify;
+  text-indent: 25px; /* Maior indentação */
+}
+
+.first-letter {
+  font-size: 4rem; /* Restaurado para o tamanho maior */
+  font-weight: bold;
+  color: #d63031;
+  float: left;
+  line-height: 3rem; /* Ajustado proporcionalmente */
+  margin-right: 12px; /* Maior margem */
+  margin-top: 6px; /* Ajustado */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Assinatura */
+.letter-signature {
+  margin-top: 50px; /* Maior margem superior */
+  text-align: right;
+  padding-top: 25px; /* Maior padding */
+  border-top: 2px solid #ffeaa7; /* Linha mais grossa */
+}
+
+.letter-signature p {
+  margin: 12px 0; /* Maior margem */
+  font-style: italic;
+  font-size: 1.1rem; /* Fonte maior */
+}
+
+.signature-name {
+  font-weight: bold;
+  color: #d63031;
+  font-size: 1.3rem; /* Aumentado de 1.1rem para 1.3rem */
+}
+
+.signature-hearts {
+  font-size: 2rem; /* Aumentado de 1.5rem para 2rem */
+  margin-top: 15px; /* Maior margem */
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Indicador de progresso da carta */
+.letter-progress-indicator {
+  position: fixed;
+  bottom: 50px;
+  left: 50vw; /* Usar vw para consistência */
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px 30px;
+  border-radius: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.letter-progress-indicator p {
+  font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  margin: 0 0 10px 0;
+}
+
+.letter-progress-bar {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.letter-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #fd79a8, #e17055, #d63031);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(253, 121, 168, 0.5);
+}
+
+/* Indicador de progresso de clique da carta */
+.letter-click-indicator {
+  position: fixed;
+  bottom: 50px;
+  left: 50vw;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px 40px;
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  animation: clickIndicatorPulse 2s ease-in-out infinite;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes clickIndicatorPulse {
+  0%, 100% { 
+    transform: translateX(-50%) scale(1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+  50% { 
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.4);
+  }
+}
+
+.letter-click-indicator p {
+  font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  animation: textPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.letter-click-progress-bar {
+  width: 100%;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 
+    inset 0 2px 5px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.letter-click-progress-fill {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.2s ease, background-color 0.3s ease;
+  box-shadow: 
+    0 0 15px rgba(255, 255, 255, 0.6),
+    inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  animation: progressGlow 1s ease-in-out infinite;
+}
+
+@keyframes progressGlow {
+  0%, 100% { 
+    box-shadow: 
+      0 0 15px rgba(255, 255, 255, 0.6),
+      inset 0 2px 5px rgba(255, 255, 255, 0.3);
+  }
+  50% { 
+    box-shadow: 
+      0 0 25px rgba(255, 255, 255, 0.8),
+      inset 0 2px 8px rgba(255, 255, 255, 0.5);
+  }
+}
+
+.click-progress-text {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  opacity: 0.9;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* Indicador quando carta está aberta */
+.letter-opened-indicator {
+  position: fixed;
+  bottom: 50px;
+  left: 50vw;
+  transform: translateX(-50%);
+  text-align: center;
+  color: white;
+  z-index: 20;
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  padding: 15px 30px;
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  animation: openedIndicatorBounce 0.5s ease-out;
+  box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+}
+
+@keyframes openedIndicatorBounce {
+  0% { 
+    transform: translateX(-50%) scale(0.5) translateY(50px);
+    opacity: 0;
+  }
+  70% { 
+    transform: translateX(-50%) scale(1.1) translateY(-10px);
+    opacity: 1;
+  }
+  100% { 
+    transform: translateX(-50%) scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.letter-opened-indicator p {
+  font-size: 16px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Efeito hover na carta quando não está aberta */
+.envelope-container:hover:not(.opened) {
+  animation: envelopeHover 0.3s ease-in-out;
+}
+
+@keyframes envelopeHover {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.02); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .writing-container { width: 90vw; }
+  .letter-path { stroke-width: 3; }
+  .heart-path { stroke-width: 2; }
+  
+  .vinyl-disk { width: 600px; height: 600px; } /* Ajustado para mobile - proporcionalmente maior */
+  .vinyl-label { width: 200px; height: 200px; }
+  .vinyl-label h3 { font-size: 22px; }
+  .vinyl-label p { font-size: 18px; }
+  
+  .progress-indicator { width: 250px; }
+  
+  /* Carta responsiva */
+  .envelope-back { width: 450px; height: 300px; } /* Proporcionalmente menor */
+  .envelope-back::before { 
+    border-left: 225px solid transparent;
+    border-right: 225px solid transparent;
+    border-bottom: 150px solid #d63031;
+  }
+  .envelope-flap {
+    border-left: 225px solid transparent;
+    border-right: 225px solid transparent;
+    border-top: 150px solid #e17055;
+  }
+  .letter-paper { width: 400px; height: 550px; padding: 30px; top: 20px; left: 25px; }
+  .letter-header h2 { font-size: 1.6rem; }
+  .letter-paragraph { font-size: 1rem; }
+  .first-letter { font-size: 3rem; }
+  .floating-heart { font-size: 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .writing-container { width: 95vw; }
+  .letter-path { stroke-width: 2; }
+  
+  .vinyl-disk { width: 500px; height: 500px; } /* Ajustado para mobile pequeno - ainda gigante */
+  .vinyl-label { width: 160px; height: 160px; }
+  .vinyl-label h3 { font-size: 20px; }
+  .vinyl-label p { font-size: 16px; }
+  
+  .progress-indicator { width: 200px; }
+  
+  /* Carta muito pequena */
+  .envelope-back { width: 350px; height: 240px; }
+  .envelope-back::before { 
+    border-left: 175px solid transparent;
+    border-right: 175px solid transparent;
+    border-bottom: 120px solid #d63031;
+  }
+  .envelope-flap {
+    border-left: 175px solid transparent;
+    border-right: 175px solid transparent;
+    border-top: 120px solid #e17055;
+  }
+  .letter-paper { width: 300px; height: 480px; padding: 20px; top: 15px; left: 25px; }
+  .letter-header h2 { font-size: 1.3rem; }
+  .letter-paragraph { font-size: 0.9rem; line-height: 1.7; }
+  .first-letter { font-size: 2.5rem; }
+  .floating-heart { font-size: 1.2rem; }
+  .letter-progress-bar { width: 150px; }
+} 

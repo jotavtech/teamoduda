@@ -10,18 +10,10 @@ function App() {
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [showAudioPrompt, setShowAudioPrompt] = useState(true);
   
-  // Estados para a mecânica de clique da carta
-  const [letterClickProgress, setLetterClickProgress] = useState(0);
-  const [isClickingLetter, setIsClickingLetter] = useState(false);
-  const [letterOpened, setLetterOpened] = useState(false);
-  
   // Refs para os áudios
   const audio1 = useRef(null);
   const audio2 = useRef(null);
   const audio3 = useRef(null);
-  
-  // Ref para o timer de decaimento da carta
-  const letterDecayTimer = useRef(null);
 
   // Função para habilitar áudio
   const enableAudio = async () => {
@@ -225,6 +217,12 @@ function App() {
   const musicProgress = musicSection ? 
     Math.max(0, Math.min((scrollY - musicSectionStart) / musicSectionHeight, 1)) : 0;
 
+  // Calcular progresso da seção da carta
+  const letterSectionStart = window.innerHeight * 4 + window.innerHeight * 10; // Após primeira e música
+  const letterSectionHeight = window.innerHeight * 6;
+  const letterProgress = letterSection && scrollY >= letterSectionStart ? 
+    Math.max(0, Math.min((scrollY - letterSectionStart) / letterSectionHeight, 1)) : 0;
+
   // Posições dos discos da seção de música - movimento muito mais lento
   let disk1X = -120; // Começar ainda mais fora da tela à esquerda
   let disk2X = -120;
@@ -289,88 +287,6 @@ function App() {
     }
   }, [musicSection, musicProgress, audioEnabled, currentTrack]);
 
-  // Funções para a mecânica de clique da carta
-  const handleLetterClick = (e) => {
-    e.preventDefault(); // Previne comportamentos padrão
-    e.stopPropagation(); // Para a propagação do evento
-    
-    if (letterOpened || !letterSection) return; // Se já está aberta ou não está na seção, não faz nada
-    
-    console.log('🖱️ Clique na carta!');
-    setIsClickingLetter(true);
-    
-    // Aumenta o progresso
-    setLetterClickProgress(prev => {
-      const newProgress = Math.min(prev + 8, 100); // Cada clique adiciona 8%
-      console.log(`📈 Progresso da carta: ${newProgress}%`);
-      
-      // Se atingiu 100%, abre a carta
-      if (newProgress >= 100) {
-        console.log('✅ Carta aberta!');
-        setLetterOpened(true);
-        // Para qualquer timer de decaimento
-        if (letterDecayTimer.current) {
-          clearTimeout(letterDecayTimer.current);
-        }
-        return 100;
-      }
-      
-      return newProgress;
-    });
-    
-    // Para o timer de decaimento se estiver rodando
-    if (letterDecayTimer.current) {
-      clearTimeout(letterDecayTimer.current);
-    }
-    
-    // Só inicia decaimento se não chegou a 100%
-    letterDecayTimer.current = setTimeout(() => {
-      setIsClickingLetter(false);
-      if (!letterOpened) {
-        startLetterDecay();
-      }
-    }, 800); // 800ms sem clicar = inicia decaimento
-  };
-  
-  const startLetterDecay = () => {
-    if (letterOpened) return; // Se já está aberta, não decai
-    
-    console.log('📉 Iniciando decaimento da carta');
-    
-    const decayInterval = setInterval(() => {
-      setLetterClickProgress(prev => {
-        if (letterOpened) {
-          clearInterval(decayInterval);
-          return prev;
-        }
-        
-        const newProgress = Math.max(prev - 2, 0); // Diminui 2% a cada 100ms
-        console.log(`📉 Decaimento: ${newProgress}%`);
-        
-        if (newProgress <= 0) {
-          clearInterval(decayInterval);
-          console.log('⏹️ Decaimento parado (chegou a 0)');
-        }
-        
-        return newProgress;
-      });
-    }, 100); // A cada 100ms
-    
-    // Limpa o interval após 5 segundos para evitar loops infinitos
-    setTimeout(() => {
-      clearInterval(decayInterval);
-    }, 5000);
-  };
-  
-  // Limpar timers ao desmontar componente
-  useEffect(() => {
-    return () => {
-      if (letterDecayTimer.current) {
-        clearTimeout(letterDecayTimer.current);
-      }
-    };
-  }, []);
-
   return (
     <div className="App">
       {/* Áudios */}
@@ -397,6 +313,81 @@ function App() {
               Pular música
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Botão de teste de áudio (apenas para debug) */}
+      {audioEnabled && !showAudioPrompt && (
+        <div style={{
+          position: 'fixed',
+          top: '10px',
+          right: '10px',
+          zIndex: 10001,
+          display: 'flex',
+          gap: '10px'
+        }}>
+          <button
+            onClick={() => playSpecificAudio(audio1, 'test1')}
+            style={{
+              padding: '10px',
+              background: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            🎵 Teste 1
+          </button>
+          <button
+            onClick={() => playSpecificAudio(audio2, 'test2')}
+            style={{
+              padding: '10px',
+              background: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            🎵 Teste 2
+          </button>
+          <button
+            onClick={() => playSpecificAudio(audio3, 'test3')}
+            style={{
+              padding: '10px',
+              background: '#ff6b6b',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            🎵 Teste 3
+          </button>
+        </div>
+      )}
+
+      {/* Status de áudio (debug) */}
+      {!showAudioPrompt && (
+        <div style={{
+          position: 'fixed',
+          top: '60px',
+          right: '10px',
+          zIndex: 10001,
+          background: 'rgba(0,0,0,0.8)',
+          color: 'white',
+          padding: '10px',
+          borderRadius: '5px',
+          fontSize: '12px'
+        }}>
+          <div>📜 Scroll: {Math.round(scrollY)}px</div>
+          <div>🎵 Áudio: {audioEnabled ? '✅ Habilitado' : '❌ Desabilitado'}</div>
+          <div>🎶 Track: {currentTrack || 'Nenhum'}</div>
+          <div>📱 Mobile: {musicSection ? '✅' : '❌'}</div>
+          <div>🎧 Audio1: {audio1.current?.readyState === 4 ? '✅' : '❌'}</div>
+          <div>🎧 Audio2: {audio2.current?.readyState === 4 ? '✅' : '❌'}</div>
+          <div>🎧 Audio3: {audio3.current?.readyState === 4 ? '✅' : '❌'}</div>
         </div>
       )}
 
@@ -594,8 +585,8 @@ function App() {
                 className="floating-heart"
                 initial={{ opacity: 0, y: 100 }}
                 animate={{ 
-                  opacity: letterSection ? 1 : 0,
-                  y: letterSection ? -20 : 100,
+                  opacity: letterProgress > 0.1 ? 1 : 0,
+                  y: letterProgress > 0.1 ? -20 : 100,
                   x: Math.sin(Date.now() * 0.001 + i) * 50
                 }}
                 transition={{ 
@@ -619,59 +610,57 @@ function App() {
             className="envelope-container"
             initial={{ scale: 0.7, opacity: 0, y: 50 }}
             animate={{ 
-              scale: letterSection ? 1 : 0.7,
-              opacity: letterSection ? 1 : 0,
-              y: letterSection ? 0 : 50
+              scale: letterProgress > 0 ? 1 : 0.7,
+              opacity: letterProgress > 0 ? 1 : 0,
+              y: letterProgress > 0 ? 0 : 50
             }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            onClick={handleLetterClick}
-            style={{ cursor: letterOpened ? 'default' : 'pointer' }}
           >
             {/* Envelope de fundo */}
             <div className="envelope-back"></div>
             
-            {/* Tampa do envelope - animação baseada no progresso de clique */}
+            {/* Tampa do envelope - animação em estágios */}
             <motion.div 
               className="envelope-flap"
-              animate={{
-                rotateX: letterOpened ? 180 : (letterClickProgress * 1.5) // Reduzido de 1.8 para 1.5
+              style={{
+                rotateX: letterProgress > 0.1 ? letterProgress * 180 : 0 // Tampa abre após 10% do scroll
               }}
-              transition={{ 
-                duration: 0.15, 
-                ease: "easeOut",
-                type: "tween"
-              }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
             ></motion.div>
             
-            {/* Carta saindo do envelope - baseada no progresso de clique */}
+            {/* Carta saindo do envelope - animação em estágios */}
             <motion.div 
               className="letter-paper"
+              initial={{ y: 0, scale: 0.95, opacity: 0.8 }}
               animate={{
-                y: letterOpened ? -20 : -(letterClickProgress * 0.2), // Movimento mínimo
-                opacity: letterClickProgress > 0 ? Math.min(1, 0.9 + (letterClickProgress * 0.001)) : 0.9
-                // Removidas scale e rotateX que podem causar deslocamento
+                y: letterProgress > 0.2 ? -80 : 0, // Carta começa a sair após 20% do scroll
+                scale: letterProgress > 0.3 ? 1 : 0.95, // Carta cresce após 30% do scroll
+                opacity: letterProgress > 0.15 ? 1 : 0.8, // Carta fica visível após 15% do scroll
+                rotateX: letterProgress > 0.25 ? 0 : -5 // Carta se alinha após 25% do scroll
               }}
               transition={{ 
-                duration: 0.05, 
-                ease: "linear",
-                type: "tween"
+                duration: 0.8, 
+                ease: "easeOut",
+                type: "spring",
+                stiffness: 100,
+                damping: 15
               }}
             >
               {/* Cabeçalho da carta */}
               <div className="letter-header">
                 <h2>💌 Para Minha Querida Maria Eduarda 💌</h2>
                 <div className="letter-date">
-                  <p>12 de Junho de 2024</p>
+                  <p>12 de junho de 2024</p>
                   <p>Com todo meu amor ❤️</p>
                 </div>
               </div>
 
-              {/* Conteúdo da carta - só aparece quando totalmente aberta */}
+              {/* Conteúdo da carta */}
               <motion.div 
                 className="letter-content"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: letterOpened ? 1 : 0 }}
-                transition={{ duration: 1.2, delay: letterOpened ? 0.3 : 0 }}
+                animate={{ opacity: letterProgress > 0.4 ? 1 : 0 }}
+                transition={{ duration: 1.2, delay: 0.3 }}
               >
                 <p className="letter-paragraph">
                   <span className="first-letter">M</span>aria Eduarda, meu amor,
@@ -726,38 +715,17 @@ function App() {
             </motion.div>
           </motion.div>
 
-          {/* Indicador de progresso de clique da carta */}
-          {!letterOpened && (
-            <div className="letter-click-indicator">
-              <p>
-                {letterClickProgress === 0 
-                  ? '💌 Clique várias vezes na carta para abri-la!' 
-                  : isClickingLetter 
-                    ? '🖱️ Continue clicando! Não pare!' 
-                    : '⚡ Clique mais rápido antes que ela se feche!'
-                }
-              </p>
-              <div className="letter-click-progress-bar">
-                <div 
-                  className="letter-click-progress-fill"
-                  style={{ 
-                    width: `${letterClickProgress}%`,
-                    backgroundColor: letterClickProgress > 70 ? '#4CAF50' : 
-                                   letterClickProgress > 40 ? '#FFC107' : '#FF5722'
-                  }}
-                ></div>
-              </div>
-              <p className="click-progress-text">{Math.round(letterClickProgress)}% aberto</p>
+          {/* Indicador de progresso da carta */}
+          <div className="letter-progress-indicator">
+            <p>Role para abrir a carta de amor 💌</p>
+            <div className="letter-progress-bar">
+              <div 
+                className="letter-progress-fill"
+                style={{ width: `${letterProgress * 100}%` }}
+              ></div>
             </div>
-          )}
-
-          {/* Indicador quando carta está aberta */}
-          {letterOpened && (
-            <div className="letter-opened-indicator">
-              <p>✅ Carta aberta! Leia nossa história de amor 💕</p>
-            </div>
-          )}
         </div>
+      </div>
       )}
     </div>
   );
